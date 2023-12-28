@@ -63,6 +63,7 @@ def practice(english_sentence, right, wrong, engine):
         question += "\n\033[32;1m翻譯: \033[0m"
         Y_answer = input(question)
         while not Y_answer.strip():
+            speak(engine, key)
             Y_answer = input(question)
         Y_answer = simplify(Y_answer)
         answer = simplify(key)
@@ -123,6 +124,7 @@ def practice(english_sentence, right, wrong, engine):
                             question += "\n\033[32;1m翻譯: \033[0m"
                             Y_answer = input(question)
                             while not Y_answer.strip():
+                                speak(engine, key)
                                 Y_answer = input(question)
                             Y_answer = simplify(Y_answer)
                             answer = simplify(key)
