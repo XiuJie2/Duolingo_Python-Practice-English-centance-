@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" sizes="512x512" type="image/png" href="image/icon.jpg">
+
+    <title>英語口語練習系統</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            min-width: 700px;
+            height: 100%;
+            max-height: 700px;
+            min-height: 500px;
+            margin: auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, #4a6cf7, #6a82fb);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .page {
+            display: none;
+            padding: 20px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .header-with-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-with-link h2 {
+            margin: 0;
+        }
+
+        .btn-link {
+            padding: 6px 12px;
+            background: #007bff;
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .btn-link:hover {
+            background: #0056b3;
+        }
+
+
+        .upload-area {
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            background: #e8f4fd;
+        }
+
+        .upload-area p {
+            margin-top: 10px;
+            color: #7f8c8d;
+        }
+
+        .file-list {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+        }
+
+        .file-name {
+            font-weight: bold;
+        }
+
+        .file-actions button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-select {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #8e44ad;
+        }
+
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .settings {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .settings h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .settings label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .settings select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f1f8ff;
+            border-radius: 8px;
+        }
+
+        .question-container {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .chinese-question {
+            font-size: 22px;
+            color: #3498db;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: #3498db;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+
+        .error-list {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .error-list {
+            margin-top: 30px;
+            padding-top: 15px;       /* 減少 padding，版面更緊湊 */
+            border-top: 1px solid #eee;
+            font-family: Arial, sans-serif;
+        }
+
+        #error-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 12px 15px;      /* 左右留白更舒適 */
+            border: 1px solid #ddd;
+            border-radius: 10px;     /* 更圓潤一點 */
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* 加點陰影，區塊更立體 */
+            scrollbar-width: thin;   /* FireFox 窄滾動條 */
+            scrollbar-color: #ccc #f9f9f9;
+        }
+
+
+        /* 自訂 Chrome 滾動條 */
+        #error-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        #error-list::-webkit-scrollbar-thumb {
+            background: #bbb;
+            border-radius: 3px;
+        }
+        #error-list::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
+
+        .error-item {
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            background: #fff8e1;         /* 顏色更柔和 */
+            border-radius: 6px;
+            border-left: 4px solid #ffc107;
+            transition: background 0.2s; /* 滑鼠移上時有點互動感 */
+        }
+
+        .error-item:hover {
+            background: #ffecb3;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 随机顺序开关样式 */
+        .random-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #3498db;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .toggle-label {
+            font-weight: 500;
+        }
+
+        .home-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .home-btn {
+            padding: 15px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>英語口語練習系統</h1>
+            <p>提升你的英語口語能力</p>
+        </header>
+
+        <!-- 首页 -->
+        <div class="page active" id="home-page">
+            <div style="text-align: center; padding: 30px 0;">
+                <h2>歡迎使用英語口語練習系統</h2>
+                <p>選擇您要的操作</p>
+
+                <div class="home-buttons">
+                    <button class="btn-primary home-btn" id="start-btn">開始練習</button>
+                    <button class="btn-secondary home-btn" id="manage-btn">管理文件</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 配置页 -->
+        <div class="page" id="config-page">
+            <h2>練習配置</h2>
+
+            <div class="settings">
+                <h3>設置</h3>
+                <label>
+                    選擇學習內容:
+                    <select id="file-selector">
+                        <option value="">-- 請選擇JSON文件 --</option>
+                    </select>
+                </label>
+
+                <div class="random-toggle">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="random-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">隨機順序</span>
+                </div>
+
+                <label>
+                    語速:
+                    <select id="speed">
+                        <option value="0.8">慢</option>
+                        <option value="1" selected>正常</option>
+                        <option value="1.2">快</option>
+                    </select>
+                </label>
+                <label>
+                    音色:
+                    <select id="voice">
+                    </select>
+                </label>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-success" id="start-practice-btn">開始練習</button>
+                <button class="btn-danger" id="back-to-home-btn">返回首頁</button>
+            </div>
+        </div>
+
+        <!-- 练习页 -->
+        <div class="page" id="practice-page">
+            <h2>英語口語練習</h2>
+
+            <div class="status-bar">
+                <div>總題數: <span id="total-questions">0</span></div>
+                <div>正確: <span id="correct-count" style="color: #27ae60;">0</span></div>
+                <div>錯誤: <span id="incorrect-count" style="color: #e74c3c;">0</span></div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress" id="progress-bar"></div>
+            </div>
+
+            <div class="question-container">
+                <div class="chinese-question" id="chinese-question">請先選擇學習文件</div>
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="answer-input" placeholder="請輸入英文翻譯..." disabled>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-secondary" id="btn-sound" disabled>播放語音</button>
+                <button class="btn-primary" id="btn-submit" disabled>提交</button>
+                <button class="btn-success" id="btn-next" disabled>下一題</button>
+                <button class="btn-danger" id="btn-quit">退出</button>
+            </div>
+
+            <div class="feedback hidden" id="feedback"></div>
+        </div>
+
+        <!-- 退出頁 -->
+        <div class="page" id="result-page">
+            <h2>練習結果</h2>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-questions-stat">0</div>
+                    <div class="stat-label">總題數</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="correct-count-stat">0</div>
+                    <div class="stat-label">正确</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="incorrect-count-stat">0</div>
+                    <div class="stat-label">錯誤</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="accuracy-stat">0%</div>
+                    <div class="stat-label">正確率</div>
+                </div>
+            </div>
+
+            <div class="error-list" id="error-list">
+                <h3>錯題列表</h3>
+                <div id="error-items"></div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-success" id="practice-errors-btn">練習錯題</button>
+                <button class="btn-primary" id="restart-btn">重新開始</button>
+                <button class="btn-danger" id="back-to-home-btn-2">返回首頁</button>
+            </div>
+        </div>
+
+        <!-- 文件管理页 -->
+        <div class="page" id="manage-page">
+            <div class="header-with-link">
+                <h2>文件管理</h2>
+                <a href="https://filesys.ntubbirc.ggff.net/share/sQCtHNMc" target="_blank" class="btn-link">
+                    獲取 JSON 文件
+                </a>
+            </div>
+
+            <div class="upload-area" id="upload-area">
+                <h3>點擊或拖放JSON文件到此處上傳</h3>
+                <p>支持的格式: {"英文句子": "中文翻譯", ...}</p>
+                <input type="file" id="file-input" accept=".json" style="display: none;">
+            </div>
+
+            <div class="file-list" id="file-list">
+                <div class="no-file-message" id="no-file-message">尚未上傳任何文件</div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn-primary" id="back-to-home-btn-3">返回首頁</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 缩写映射
+        const abbreviationMapping = {
+            "it's": "it is",
+            "can't": "cannot",
+            "won't": "will not",
+            "i'm": "i am",
+            "you're": "you are",
+            "they're": "they are",
+            "we're": "we are",
+            "don't": "do not",
+            "didn't": "did not",
+            "doesn't": "does not",
+            "i'll": "i will",
+            "what's": "what is",
+            "i'd": "i would",
+            "how's": "how is"
+        };
+
+        // 全局变量
+        let currentQuestion = {};
+        let questions = [];
+        let originalQuestions = [];
+        let currentIndex = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let errors = {};
+        let synth = window.speechSynthesis;
+        let voices = [];
+        let selectedVoice = null;
+        let speechRate = 1;
+        let uploadedFiles = {};
+        let isRandomOrder = false;
+        let isAnswerSubmitted = false;
+        let isPracticeStarted = false;
+
+        // 音频元素
+        const rightSound = new Audio('./sound/right.mp3');
+        const wrongSound = new Audio('./sound/wrong.wav');
+        const successSound = new Audio('./sound/success.mp3');
+
+        // DOM元素
+        const homePage = document.getElementById('home-page');
+        const configPage = document.getElementById('config-page');
+        const practicePage = document.getElementById('practice-page');
+        const resultPage = document.getElementById('result-page');
+        const managePage = document.getElementById('manage-page');
+        const startBtn = document.getElementById('start-btn');
+        const manageBtn = document.getElementById('manage-btn');
+        const startPracticeBtn = document.getElementById('start-practice-btn');
+        const backToHomeBtn = document.getElementById('back-to-home-btn');
+        const backToHomeBtn2 = document.getElementById('back-to-home-btn-2');
+        const backToHomeBtn3 = document.getElementById('back-to-home-btn-3');
+        const practiceErrorsBtn = document.getElementById('practice-errors-btn');
+        const restartBtn = document.getElementById('restart-btn');
+
+        const chineseQuestion = document.getElementById('chinese-question');
+        const answerInput = document.getElementById('answer-input');
+        const btnSound = document.getElementById('btn-sound');
+        const btnSubmit = document.getElementById('btn-submit');
+        const btnNext = document.getElementById('btn-next');
+        const btnQuit = document.getElementById('btn-quit');
+        const feedback = document.getElementById('feedback');
+        const errorList = document.getElementById('error-list');
+        const errorItems = document.getElementById('error-items');
+        const totalQuestions = document.getElementById('total-questions');
+        const correctCountElem = document.getElementById('correct-count');
+        const incorrectCountElem = document.getElementById('incorrect-count');
+        const progressBar = document.getElementById('progress-bar');
+        const speedSelect = document.getElementById('speed');
+        const voiceSelect = document.getElementById('voice');
+        const fileSelector = document.getElementById('file-selector');
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+        const noFileMessage = document.getElementById('no-file-message');
+        const randomToggle = document.getElementById('random-toggle');
+
+        const totalQuestionsStat = document.getElementById('total-questions-stat');
+        const correctCountStat = document.getElementById('correct-count-stat');
+        const incorrectCountStat = document.getElementById('incorrect-count-stat');
+        const accuracyStat = document.getElementById('accuracy-stat');
+
+        // 初始化函数
+        function init() {
+            // 加载本地存储的文件
+            loadStoredFiles();
+
+            // 加载语音
+            loadVoices();
+            if (synth.onvoiceschanged !== undefined) {
+                synth.onvoiceschanged = loadVoices;
+            }
+
+            // 设置事件监听器
+            setupEventListeners();
+
+            // 更新文件选择器
+            updateFileSelector();
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 页面导航
+            startBtn.addEventListener('click', () => switchPage('config'));
+            manageBtn.addEventListener('click', () => switchPage('manage'));
+            startPracticeBtn.addEventListener('click', startPractice);
+            backToHomeBtn.addEventListener('click', () => switchPage('home'));
+            backToHomeBtn2.addEventListener('click', () => switchPage('home'));
+            backToHomeBtn3.addEventListener('click', () => switchPage('home'));
+            practiceErrorsBtn.addEventListener('click', practiceErrors);
+            restartBtn.addEventListener('click', restartPractice);
+
+            // 练习相关
+            btnSound.addEventListener('click', playQuestionSound);
+            btnSubmit.addEventListener('click', checkAnswer);
+            btnNext.addEventListener('click', nextQuestion);
+            btnQuit.addEventListener('click', showResults);
+            answerInput.addEventListener('keydown', handleKeyDown);
+
+            speedSelect.addEventListener('change', () => {
+                speechRate = parseFloat(speedSelect.value);
+            });
+
+            fileSelector.addEventListener('change', loadSelectedFile);
+
+            // 随机顺序开关事件
+            randomToggle.addEventListener('change', toggleRandomOrder);
+
+            // 文件上传相关事件
+            uploadArea.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileUpload);
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.background = '#e3f2fd';
+            });
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.background = '#f8fafc';
+            });
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.background = '#f8fafc';
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFileUpload();
+                }
+            });
+        }
+
+        // 切换页面
+        function switchPage(page) {
+            // 隐藏所有页面
+            homePage.classList.remove('active');
+            configPage.classList.remove('active');
+            practicePage.classList.remove('active');
+            resultPage.classList.remove('active');
+            managePage.classList.remove('active');
+
+            // 显示指定页面
+            switch(page) {
+                case 'home':
+                    homePage.classList.add('active');
+                    break;
+                case 'config':
+                    configPage.classList.add('active');
+                    break;
+                case 'practice':
+                    practicePage.classList.add('active');
+                    break;
+                case 'result':
+                    resultPage.classList.add('active');
+                    updateResultStats();
+                    break;
+                case 'manage':
+                    managePage.classList.add('active');
+                    break;
+            }
+        }
+
+        // 处理键盘事件
+        function handleKeyDown(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // 阻止换行
+
+                // 無文字 第一次回车 → 播放題目
+                if (answerInput.value.trim() == '') {
+                    playQuestionSound();
+                }
+
+                // 有文字 第一次回车 → 提交答案
+                else if (!isAnswerSubmitted && answerInput.value.trim() !== '') {
+                    checkAnswer();
+                }
+                // 第二次回车 → 下一题
+                else if (isAnswerSubmitted && !btnNext.disabled) {
+                    nextQuestion();
+                }
+            }
+        }
+
+        // 开始练习
+        function startPractice() {
+            const fileName = fileSelector.value;
+            if (!fileName || !uploadedFiles[fileName]) {
+                alert('請先選擇學習文件');
+                return;
+            }
+
+            loadSelectedFile();
+            switchPage('practice');
+
+            nextQuestion();  // 這裡才正式進入題目
+        }
+
+        // 显示结果
+        function showResults() {
+            switchPage('result');
+        }
+
+        // 更新结果统计
+        function updateResultStats() {
+            const total = questions.length;
+            const accuracy = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+
+            totalQuestionsStat.textContent = total;
+            correctCountStat.textContent = correctCount;
+            incorrectCountStat.textContent = incorrectCount;
+            accuracyStat.textContent = `${accuracy}%`;
+
+            // 显示错题
+            errorItems.innerHTML = '';
+            if (Object.keys(errors).length === 0) {
+                errorItems.innerHTML = '<p>沒有錯題 ٩(๑•̀ω•́๑)۶棒棒！</p>';
+            } else {
+                for (const [en, cn] of Object.entries(errors)) {
+                    const errorItem = document.createElement('div');
+                    errorItem.className = 'error-item';
+                    errorItem.innerHTML = `
+                        <p><strong>中文:</strong> ${cn}</p>
+                        <p><strong>英文:</strong> ${en}</p>
+                    `;
+                    errorItems.appendChild(errorItem);
+                }
+            }
+        }
+
+        // 练习错题
+        function practiceErrors() {
+            if (Object.keys(errors).length === 0) {
+                alert('沒有錯題可以練習！ ٩(๑•̀ω•́๑)۶棒棒！');
+                return;
+            }
+
+            // 将错题转换为问题格式
+            questions = Object.entries(errors).map(([en, cn]) => ({ en, cn }));
+            originalQuestions = [...questions];
+
+            // 重置状态
+            currentIndex = 0;
+            correctCount = 0;
+            incorrectCount = 0;
+            totalQuestions.textContent = questions.length;
+            correctCountElem.textContent = '0';
+            incorrectCountElem.textContent = '0';
+            progressBar.style.width = '0%';
+
+            // 开始练习
+            switchPage('practice');
+            nextQuestion();
+        }
+
+        // 重新开始
+        function restartPractice() {
+            loadSelectedFile();
+            switchPage('practice');
+        }
+
+        // 切换随机顺序
+        function toggleRandomOrder() {
+            isRandomOrder = randomToggle.checked;
+
+            if (questions.length > 0) {
+                if (isRandomOrder) {
+                    originalQuestions = [...questions];
+                    shuffleArray(questions);
+                } else if (originalQuestions.length > 0) {
+                    questions = [...originalQuestions];
+                }
+
+                currentIndex = 0;
+            }
+        }
+
+        // 数组随机排序函数
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // 加载本地存储的文件
+        function loadStoredFiles() {
+            const storedFiles = localStorage.getItem('uploadedFiles');
+            if (storedFiles) {
+                uploadedFiles = JSON.parse(storedFiles);
+                renderFileList();
+            }
+        }
+
+        // 保存文件到本地存储
+        function saveFilesToStorage() {
+            localStorage.setItem('uploadedFiles', JSON.stringify(uploadedFiles));
+        }
+
+        // 处理文件上传
+        function handleFileUpload() {
+            const file = fileInput.files[0];
+            if (!file || !file.name.endsWith('.json')) {
+                alert('请选择有效的JSON文件');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const content = JSON.parse(e.target.result);
+                    if (typeof content !== 'object' || Array.isArray(content)) {
+                        throw new Error('無效的JSON格式，應為鍵值對對象');
+                    }
+
+                    const fileName = file.name.replace('.json', '');
+                    uploadedFiles[fileName] = content;
+                    saveFilesToStorage();
+                    renderFileList();
+                    updateFileSelector();
+
+                    alert(`文件 "${fileName}" 上傳成功！`);
+                    fileInput.value = '';
+                } catch (error) {
+                    alert('解析JSON文件時出錯: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // 渲染文件列表
+        function renderFileList() {
+            const fileKeys = Object.keys(uploadedFiles);
+
+            if (fileKeys.length === 0) {
+                noFileMessage.classList.remove('hidden');
+                fileList.innerHTML = '';
+                return;
+            }
+
+            noFileMessage.classList.add('hidden');
+            fileList.innerHTML = '';
+
+            fileKeys.forEach(fileName => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div class="file-name">${fileName}</div>
+                    <div class="file-actions">
+                        <button class="btn-select" data-file="${fileName}">選擇</button>
+                        <button class="btn-delete" data-file="${fileName}">刪除</button>
+                    </div>
+                `;
+                fileList.appendChild(fileItem);
+            });
+
+            // 添加事件监听器
+            document.querySelectorAll('.btn-select').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const fileName = e.target.getAttribute('data-file');
+                    fileSelector.value = fileName;
+                });
+            });
+
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const fileName = e.target.getAttribute('data-file');
+                    if (confirm(`确定要刪除 "${fileName}" 嗎？`)) {
+                        delete uploadedFiles[fileName];
+                        saveFilesToStorage();
+                        renderFileList();
+                        updateFileSelector();
+                    }
+                });
+            });
+        }
+
+        // 更新文件选择器
+        function updateFileSelector() {
+            const currentValue = fileSelector.value;
+            fileSelector.innerHTML = '<option value="">-- 請選擇JSON文件 --</option>';
+
+            Object.keys(uploadedFiles).forEach(fileName => {
+                const option = document.createElement('option');
+                option.value = fileName;
+                option.textContent = fileName;
+                fileSelector.appendChild(option);
+            });
+
+            fileSelector.value = currentValue;
+        }
+
+        // 加载选中的文件
+        function loadSelectedFile() {
+            const fileName = fileSelector.value;
+            if (!fileName || !uploadedFiles[fileName]) {
+                resetPractice();
+                return;
+            }
+
+            const fileContent = uploadedFiles[fileName];
+            questions = Object.entries(fileContent).map(([en, cn]) => ({ en, cn }));
+
+            originalQuestions = [...questions];
+
+            if (isRandomOrder) {
+                shuffleArray(questions);
+            }
+
+            totalQuestions.textContent = questions.length;
+
+            currentIndex = 0;
+            correctCount = 0;
+            incorrectCount = 0;
+            errors = {};
+            correctCountElem.textContent = '0';
+            incorrectCountElem.textContent = '0';
+            progressBar.style.width = '0%';
+            feedback.classList.add('hidden');
+            isAnswerSubmitted = false;
+        }
+
+        // 重置练习状态
+        function resetPractice() {
+            questions = [];
+            originalQuestions = [];
+            currentIndex = 0;
+            correctCount = 0;
+            incorrectCount = 0;
+            errors = {};
+            correctCountElem.textContent = '0';
+            incorrectCountElem.textContent = '0';
+            totalQuestions.textContent = '0';
+            progressBar.style.width = '0%';
+            chineseQuestion.textContent = '請先選擇學習文件';
+            feedback.classList.add('hidden');
+            isAnswerSubmitted = false;
+
+            answerInput.value = '';
+            answerInput.disabled = true;
+            btnSound.disabled = true;
+            btnSubmit.disabled = true;
+            btnNext.disabled = true;
+        }
+
+        // 加载可用语音
+        function loadVoices() {
+            voices = synth.getVoices();
+            voiceSelect.innerHTML = '';
+
+            let englishVoices = voices.filter(voice => voice.lang.startsWith('en'));
+            if (englishVoices.length === 0) {
+                englishVoices = voices;
+            }
+
+            englishVoices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                voiceSelect.appendChild(option);
+            });
+
+            if (englishVoices.length > 0) {
+                selectedVoice = englishVoices[0];
+            }
+
+            voiceSelect.addEventListener('change', () => {
+                selectedVoice = englishVoices[voiceSelect.value];
+            });
+        }
+
+        // 播放问题语音
+        function playQuestionSound() {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(currentQuestion.en);
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+            utterance.rate = speechRate;
+
+            synth.speak(utterance);
+        }
+
+        // 扩展缩写
+        function expandAbbreviations(text) {
+            let result = text.toLowerCase();
+            for (const [abbr, full] of Object.entries(abbreviationMapping)) {
+                result = result.replace(abbr, full);
+            }
+            return result;
+        }
+
+        // 简化文本进行比较
+        function simplify(text) {
+            const expanded = expandAbbreviations(text);
+            return expanded.replace(/[^\w]/g, '').toLowerCase();
+        }
+
+        // 检查答案
+        function checkAnswer() {
+            const userAnswer = answerInput.value.trim();
+            if (!userAnswer) return;
+
+            const simplifiedUser = simplify(userAnswer);
+            const simplifiedCorrect = simplify(currentQuestion.en);
+
+            const similarity = calculateSimilarity(simplifiedUser, simplifiedCorrect);
+
+            if (similarity > 0.95) {
+                showFeedback('回答正確!', 'correct');
+                rightSound.play();
+                correctCount++;
+                correctCountElem.textContent = correctCount;
+            } else {
+                showFeedback('回答錯誤! 正確答案: ' + currentQuestion.en, 'incorrect');
+                wrongSound.play();
+                incorrectCount++;
+                incorrectCountElem.textContent = incorrectCount;
+
+                errors[currentQuestion.en] = currentQuestion.cn;
+            }
+
+            updateProgressBar();
+
+            btnSubmit.disabled = true;
+            btnNext.disabled = false;
+
+            isAnswerSubmitted = true;
+        }
+
+        // 计算字符串相似度
+        function calculateSimilarity(str1, str2) {
+            const len = Math.max(str1.length, str2.length);
+            if (len === 0) return 1.0;
+
+            const distance = levenshteinDistance(str1, str2);
+            return 1 - distance / len;
+        }
+
+        // 莱文斯坦距离算法
+        function levenshteinDistance(str1, str2) {
+            const matrix = [];
+
+            for (let i = 0; i <= str1.length; i++) {
+                matrix[i] = [i];
+            }
+
+            for (let j = 0; j <= str2.length; j++) {
+                matrix[0][j] = j;
+            }
+
+            for (let i = 1; i <= str1.length; i++) {
+                for (let j = 1; j <= str2.length; j++) {
+                    if (str1.charAt(i-1) === str2.charAt(j-1)) {
+                        matrix[i][j] = matrix[i-1][j-1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i-1][j-1] + 1,
+                            matrix[i][j-1] + 1,
+                            matrix[i-1][j] + 1
+                        );
+                    }
+                }
+            }
+
+            return matrix[str1.length][str2.length];
+        }
+
+        // 显示反馈信息
+        function showFeedback(message, className) {
+            feedback.textContent = message;
+            feedback.className = 'feedback ' + className;
+            feedback.classList.remove('hidden');
+        }
+
+        // 下一题
+        function nextQuestion() {
+            if (currentIndex >= questions.length) {
+                showResults();
+                return;
+            }
+
+            currentQuestion = questions[currentIndex];
+            currentIndex++;
+
+            chineseQuestion.textContent = currentQuestion.cn;
+            answerInput.value = '';
+            answerInput.disabled = false;
+            feedback.classList.add('hidden');
+
+            btnSound.disabled = false;
+            btnSubmit.disabled = false;
+            btnNext.disabled = true;
+
+            isAnswerSubmitted = false;
+
+            playQuestionSound();
+
+            answerInput.focus();
+        }
+
+        // 更新进度条
+        function updateProgressBar() {
+            const progress = (currentIndex / questions.length) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        // 初始化应用
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
